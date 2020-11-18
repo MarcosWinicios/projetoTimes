@@ -23,7 +23,7 @@
             $con = new Conexao();
             $treinadorDao = new TreinadorDao($con);
             $atletaDao = new AtletaDao($con);
-            
+
             $atletas = array();
 
             foreach($resultados as $key => $objeto){
@@ -36,9 +36,11 @@
                 $time->__set('qntVitoria', $objeto->qntVitoria);
                 $time->__set('anoFundacao', $objeto->anoFundacao);
 
+                $times[] = $time;
+
 
             }
-            return $time;
+            return $times;
         }
     }
 ?>
