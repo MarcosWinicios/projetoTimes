@@ -5,13 +5,24 @@
 
 
     $conexao = new Conexao();
-    //Listar Tudo
-
     $timeDao = new TimeDao($conexao);
+    
+    //Listar Tudo
+    echo "<h1>Listar todos os Times</h1>";
 
     $times =  $timeDao->listarTudo();
 
     echo "<pre>";
     print_r($times);
-    echo "</pre>"
+    echo "</pre>";
+
+    //Pesquisando times por nome
+    echo "<h1>Pesquisa de Times por nome</h1>";
+
+    $times2 = $timeDao->pesquisarNome('Goiás');
+
+    echo "<pre>";
+    print_r($times2);
+    echo "</pre>";
+
 ?>

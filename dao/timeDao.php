@@ -7,29 +7,26 @@
 
     class TimeDao {
         private $conexao;
+        private $atletaDao;
+        private $treinadorDao;
 
         public function __construct(Conexao $conexao){
             $this->conexao = $conexao->conectar();
+            $this->atletaDao = new AtletaDao($conexao);
+            $this->treinadorDao = new TreinadorDao($conexao);
         }
 
         public function listarTudo(){
-            $sql = "SELECT * FROM time t INNER JOIN atletaTime at ON t.id = at.idTime";
+            $sql = "SELECT * FROM time";
             $stmt = $this->conexao->prepare($sql);
             $stmt->execute();
 
             $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
             $times = array();
 
-            $con = new Conexao();
-            $treinadorDao = new TreinadorDao($con);
-            $atletaDao = new AtletaDao($con);
-
-            $atletas = array();
-
             foreach($resultados as $key => $objeto){
-                $treinador = $treinadorDao->pesquisarId($objeto->idTreinador);
-                $atleta = $atletaDao->pesquisarId($objeto->idAtleta);
-                $atletas[] = $atleta;
+                $treinador = $this->treinadorDao->pesquisarId($objeto->idTreinador);
+                $atletas = $this->atletaDao->pesquisarTime($objeto->id);
 
                 $time =  new Time($objeto->nome, $objeto->cidade, $treinador, $atletas);
                 $time->__set('id', $objeto->id);
@@ -37,8 +34,28 @@
                 $time->__set('anoFundacao', $objeto->anoFundacao);
 
                 $times[] = $time;
+            }
+            return $times;
+        }
 
+        public function pesquisarNome($nome){
+            $sql = "SELECT * FROM time WHERE nome = :nome";
+            $stmt =  $this->conexao->prepare($sql);
+            $stmt->bindValue(':nome', $nome);
+            $stmt->execute();
 
+            $resultados =  $stmt->fetchAll(PDO::FETCH_OBJ);
+            $times = array();
+
+            foreach($resultados as $key => $objeto){
+                $atletas = $this->atletaDao->pesquisarTime($objeto->id);
+                $treinador =  $this->treinadorDao->pesquisarId($objeto->idTreinador);
+                $time = new Time($objeto->nome, $objeto->cidade, $treinador, $atletas);
+                $time->__set('id', $objeto->id);
+                $time->__set('qntVitoria', $objeto->qntVitoria);
+                $time->__set('anoFundacao', $objeto->anoFundacao);
+
+                $times[] = $time;
             }
             return $times;
         }
