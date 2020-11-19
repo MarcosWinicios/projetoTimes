@@ -25,4 +25,13 @@
     print_r($times2);
     echo "</pre>";
 
+    //Pesquisar por Time
+    echo "<h1>Pesquisa de Times por id</h1>";
+    $time = $timeDao->pesquisarId(2);
+
+    echo "<pre>";
+    print_r($time);
+    echo "</pre>";
+
+
 ?>

@@ -24,14 +24,14 @@
             $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
             $times = array();
 
-            foreach($resultados as $key => $objeto){
-                $treinador = $this->treinadorDao->pesquisarId($objeto->idTreinador);
-                $atletas = $this->atletaDao->pesquisarTime($objeto->id);
+            foreach($resultados as $key => $resultado){
+                $treinador = $this->treinadorDao->pesquisarId($resultado->idTreinador);
+                $atletas = $this->atletaDao->pesquisarTime($resultado->id);
 
-                $time =  new Time($objeto->nome, $objeto->cidade, $treinador, $atletas);
-                $time->__set('id', $objeto->id);
-                $time->__set('qntVitoria', $objeto->qntVitoria);
-                $time->__set('anoFundacao', $objeto->anoFundacao);
+                $time =  new Time($resultado->nome, $resultado->cidade, $treinador, $atletas);
+                $time->__set('id', $resultado->id);
+                $time->__set('qntVitoria', $resultado->qntVitoria);
+                $time->__set('anoFundacao', $resultado->anoFundacao);
 
                 $times[] = $time;
             }
@@ -47,17 +47,39 @@
             $resultados =  $stmt->fetchAll(PDO::FETCH_OBJ);
             $times = array();
 
-            foreach($resultados as $key => $objeto){
-                $atletas = $this->atletaDao->pesquisarTime($objeto->id);
-                $treinador =  $this->treinadorDao->pesquisarId($objeto->idTreinador);
-                $time = new Time($objeto->nome, $objeto->cidade, $treinador, $atletas);
-                $time->__set('id', $objeto->id);
-                $time->__set('qntVitoria', $objeto->qntVitoria);
-                $time->__set('anoFundacao', $objeto->anoFundacao);
+            foreach($resultados as $key => $resultado){
+                $atletas = $this->atletaDao->pesquisarTime($resultado->id);
+                $treinador =  $this->treinadorDao->pesquisarId($resultado->idTreinador);
+                $time = new Time($resultado->nome, $resultado->cidade, $treinador, $atletas);
+                $time->__set('id', $resultado->id);
+                $time->__set('qntVitoria', $resultado->qntVitoria);
+                $time->__set('anoFundacao', $resultado->anoFundacao);
 
                 $times[] = $time;
             }
             return $times;
         }
+
+        public function pesquisarId($id){
+            $sql = "SELECT * FROM time WHERE id = :id";
+            $stmt =  $this->conexao->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+
+            $resultado =  $stmt->fetch(PDO::FETCH_OBJ);
+
+            
+            $atletas = $this->atletaDao->pesquisarTime($resultado->id);
+            $treinador =  $this->treinadorDao->pesquisarId($resultado->idTreinador);
+            $time = new Time($resultado->nome, $resultado->cidade, $treinador, $atletas);
+            $time->__set('id', $resultado->id);
+            $time->__set('qntVitoria', $resultado->qntVitoria);
+            $time->__set('anoFundacao', $resultado->anoFundacao);
+
+            return $time;
+        }
+          
+
+        
     }
 ?>
