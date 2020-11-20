@@ -30,18 +30,24 @@
         }
 
         public function pesquisarNome($nome){
-            $sql = "SELECT * FROM treinador WHERE nome = :nome";
+            $sql = "SELECT * FROM treinador WHERE nome like :nome";
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':nome',"%$nome%");
             $stmt->execute();
 
-            $resultado =  $stmt->fetch(PDO::FETCH_OBJ);
-            $treinador = new Treinador($resultado->nome, $resultado->salario);
-            $treinador->__set('id', $resultado->id);
-            $treinador->__set('qntVitoria', $resultado->qntVitoria);
-            $treinador->__set('bonusSalario', $resultado->bonusSalario);
+            $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $treinadores = array();
 
-            return $treinador;
+            foreach ($resultados as $id => $objeto){
+                $treinador =  new Treinador($objeto->nome, $objeto->salario);
+                $treinador->__set('id', $objeto->id);
+                $treinador->__set('qntVitoria', $objeto->qntVitoria);
+                $treinador->__set('bonusSalario', $objeto->bonusSalario);
+
+                $treinadores[] = $treinador;
+            }
+
+            return $treinadores;
         }
 
         public function pesquisarId($id){
@@ -67,6 +73,9 @@
             $stmt->bindValue('qntVitoria', $treinador->__get('qntVitoria'));
             $stmt->bindValue('bonusSalario', $treinador->__get('bonusSalario'));
             $stmt->execute();
+
+            $treinador->__set('id', $this->conexao->lastInsertId());
+            return $treinador;
         }
 
     }

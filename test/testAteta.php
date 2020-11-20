@@ -19,7 +19,7 @@
     //Pesquisar Atleta por nome
     echo "<h1>Pesquisa de atletas por nome</h1>";
 
-    $atleta2 = $atletaDao->pesquisarNome('Marcos');
+    $atleta2 = $atletaDao->pesquisarNome('a');
 
     echo "<pre>";
     print_r($atleta2);
@@ -46,18 +46,13 @@
     //Salvar atleta
     echo "<h1>Salvar Atleta</h1>";
 
-    $at =  new Atleta('João', 22);
-    $at->__set('altura', 1.67);
-    $at->__set('peso', 77);
-    $at->__set('salario', 1880);
+    $at =  new Atleta('Gabriel', 21);
+    $at->__set('altura', 1.85);
+    $at->__set('peso', 82);
+    $at->__set('salario', 1850);
 
-    $atletaDao->salvar($at);
-
-
-
-    $atletas3 = $atletaDao->listarTudo();
-
+    
     echo "<pre>";
-    print_r($atletas3);
+    print_r($atletaDao->salvar($at));
     echo "</pre>";
 ?>

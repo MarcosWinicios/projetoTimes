@@ -39,9 +39,9 @@
         }
 
         public function pesquisarNome($nome){
-            $sql = "SELECT * FROM time WHERE nome = :nome";
+            $sql = "SELECT * FROM time WHERE nome like :nome";
             $stmt =  $this->conexao->prepare($sql);
-            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':nome', "%$nome%");
             $stmt->execute();
 
             $resultados =  $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -79,7 +79,35 @@
             return $time;
         }
           
+        public function salvar(Time $time){
+            $sql = "INSERT INTO time(nome, cidade, qntvitoria, anoFundacao, idTreinador)VALUES(:nome, :cidade, :qntVitoria, :anoFundacao, :idTreinador)";
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindValue(':nome', $time->__get('nome'));
+            $stmt->bindValue(':cidade', $time->__get('cidade'));
+            $stmt->bindValue(':qntVitoria', $time->__get('qntVitoria'));
+            $stmt->bindValue(':anoFundacao', $time->__get('anoFundacao'));
+            $treinador = $time->__get('treinador');
+            $stmt->bindValue(':idTreinador', $treinador->__get('id'));
+            $stmt->execute();       
 
+            $time->__set('id', $this->conexao->lastInsertId());
+            $this->addAtletas($time);
+            return $time;
+        }
+
+        private function addAtletas(Time $time){
+            
+            foreach($time->__get('atletas') as $atleta => $objeto){  
+              
+                $sql = "INSERT INTO atletaTime(idTime, idAtleta)VALUES(:idTime, :idAtleta)";
+                $stmt =  $this->conexao->prepare($sql);
+                $stmt->bindValue(':idTime', $time->__get('id'));
+                $stmt->bindValue(':idAtleta', $objeto->id);
+                $stmt->execute();
+
+            }
+            
+        }
         
     }
 ?>

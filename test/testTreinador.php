@@ -17,7 +17,7 @@
     //Pesquisar Por Nome
     echo "<h1>Pesquisar Treinador por nome</h1>";
 
-    $treinador = $treinadorDao->pesquisarNome('José');
+    $treinador = $treinadorDao->pesquisarNome('Fulano');
     echo "<pre>";
     print_r($treinador);
     echo "</pre>";
@@ -33,15 +33,13 @@
     //Salvar
     echo "<h1>Salvar Treinador</h1>";
 
-    $tr =  new Treinador('Fulano', 1500);
-    $tr->__set('qntVitoria', 15);
-    $tr->__set('bonusSalario', 1200.25);
+    $tr =  new Treinador('Siclando', 1600);
+    $tr->__set('qntVitoria', 12);
+    $tr->__set('bonusSalario', 1300.25);
 
-    $treinadorDao->salvar($tr);
 
-    $treinadores2 = $treinadorDao->listarTudo();
     echo "<pre>";
-    print_r($treinadores2);
+    print_r($treinadorDao->salvar($tr));
     echo "</pre>";
 
 
