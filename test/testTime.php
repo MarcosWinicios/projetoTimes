@@ -43,16 +43,15 @@
 
     $atletas =  array();
 
-    $atletas[] = $atletaDao->pesquisarId(9);
-    $atletas[] = $atletaDao->pesquisarId(10);
-    // $atletas[] = $atletaDao->pesquisarId(8);
+    $atletas[] = $atletaDao->pesquisarId(12);
+    $atletas[] = $atletaDao->pesquisarId(11);
 
-    $treinador = $treinadorDao->pesquisarId(4);
+    $treinador = $treinadorDao->pesquisarId(5);
 
 
-    $time2 =  new Time('Grêmio', 'Itapaci', $treinador, $atletas);
-    $time2->__set('qntVitoria', 8);
-    $time2->__set('anoFundacao', 1940);
+    $time2 =  new Time('Veteranos', 'Ceres', $treinador, $atletas);
+    $time2->__set('qntVitoria', 5);
+    $time2->__set('anoFundacao', 1840);
 
 
     echo "<pre>";

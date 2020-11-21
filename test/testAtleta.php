@@ -46,10 +46,10 @@
     //Salvar atleta
     echo "<h1>Salvar Atleta</h1>";
 
-    $at =  new Atleta('Gabriel', 21);
-    $at->__set('altura', 1.85);
-    $at->__set('peso', 82);
-    $at->__set('salario', 1850);
+    $at =  new Atleta('Fernando', 23);
+    $at->__set('altura', 1.75);
+    $at->__set('peso', 87);
+    $at->__set('salario', 1650);
 
     
     echo "<pre>";

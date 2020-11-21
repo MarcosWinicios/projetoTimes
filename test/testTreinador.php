@@ -33,9 +33,9 @@
     //Salvar
     echo "<h1>Salvar Treinador</h1>";
 
-    $tr =  new Treinador('Siclando', 1600);
-    $tr->__set('qntVitoria', 12);
-    $tr->__set('bonusSalario', 1300.25);
+    $tr =  new Treinador('Beltrano', 1700);
+    $tr->__set('qntVitoria', 11);
+    $tr->__set('bonusSalario', 400.25);
 
 
     echo "<pre>";
